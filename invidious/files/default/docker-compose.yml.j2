@@ -1,0 +1,44 @@
+version: "3"
+services:
+
+  invidious:
+    image: {{ invidious.lookup.containers.invidious.image }}
+    restart: unless-stopped
+    ports:
+      - "{{ invidious.config.port }}:{{ invidious.config.port }}"
+    # Invidious configuration can be passed in several ways:
+    # * INVIDIOUS_CONFIG_FILE allows to set alternative config.yml
+    # * INVIDIOUS_CONFIG allows to set config as YAML string
+    # * individual values can be prefixed with INVIDIOUS_ and uppercased,
+    #   then passed as yaml-encoded strings
+    # Permission issues are best avoided with env vars.
+    # This necessitates a container rebuild though instead
+    # of a simple restart. The configuration can be overridden
+    # inside the container, e.g. using the admin panel.
+    env_file:
+      - {{ invidious.lookup.paths.config_invidious }}
+    healthcheck:
+      test: wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/comments/jNQXAC9IVRw || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 2
+    depends_on:
+      - invidious-db
+
+  invidious-db:
+    image: {{ invidious.lookup.containers.postgres.image }}
+    restart: unless-stopped
+    volumes:
+      - {{ invidious.lookup.paths.db or "postgresdata" }}:/var/lib/postgresql/data
+      - {{ invidious.lookup.paths.src | path_join("config", "sql") }}:/config/sql
+      - {{ invidious.lookup.paths.src | path_join("docker", "init-invidious-db.sh") }}:/docker-entrypoint-initdb.d/init-invidious-db.sh
+    env_file:
+      - {{ invidious.lookup.paths.config_postgres }}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+
+{%- if not invidious.lookup.paths.db %}
+
+volumes:
+  postgresdata:
+{%- endif %}

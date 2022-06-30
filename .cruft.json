@@ -1,0 +1,57 @@
+{
+  "template": "https://github.com/lkubb/salt-template-formula-compose",
+  "commit": "3bf116fca254f07ebcba5a30fcc5f071472ef84a",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "_extensions": [
+        "local_extensions.YAMLDumper"
+      ],
+      "_jinja2_env_vars": {
+        "block_start_string": "{!",
+        "block_end_string": "!}",
+        "variable_start_string": "{=",
+        "variable_end_string": "=}",
+        "comment_start_string": "{@",
+        "comment_end_string": "@}"
+      },
+      "name": "Invidious",
+      "abbr": "invidious",
+      "abbr_pysafe": "invidious",
+      "project_name": "invidious",
+      "containers": "invidious,postgres",
+      "git_username": "lkubb",
+      "_lookup": {
+        "containers": {
+          "invidious": {
+            "image": "quay.io/invidious/invidious:latest"
+          },
+          "postgres": {
+            "image": "docker.io/library/postgres:14"
+          }
+        },
+        "paths": {
+          "db": "data",
+          "src": "src"
+        },
+        "repo": "https://github.com/iv-org/invidious"
+      },
+      "_settings": {
+        "config": {
+          "check_tables": true,
+          "db": {
+            "user": "invidious",
+            "password": null,
+            "host": "invidious-db",
+            "port": 5432,
+            "dbname": "invidious"
+          },
+          "hmac_key": null,
+          "port": 3000
+        }
+      },
+      "_template": "https://github.com/lkubb/salt-template-formula-compose"
+    }
+  },
+  "directory": null
+}

@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+#
+# Set default values.
+---
+values:
+  lookup:
+    rootgroup: root
+    compose:
+      create_pod: null
+      pod_args: null
+      project_name: invidious
+      remove_orphans: true
+      service:
+        container_prefix: null
+        ephemeral: true
+        pod_prefix: null
+        restart_policy: on-failure
+        separator: null
+        stop_timeout: null
+    paths:
+      base: /opt/containers/invidious
+      compose: docker-compose.yml
+      config_invidious: invidious.env
+      config_postgres: postgres.env
+      db: data
+      src: src
+    user:
+      groups: []
+      home: null
+      name: invidious
+      shell: /usr/sbin/nologin
+      uid: null
+    containers:
+      invidious:
+        image: quay.io/invidious/invidious:latest
+      postgres:
+        image: docker.io/library/postgres:14
+    repo: https://github.com/iv-org/invidious
+  install:
+    rootless: true
+    remove_all_data_for_sure: false
+  config:
+    check_tables: true
+    db:
+      dbname: invidious
+      host: invidious-db
+      password: null
+      port: 5432
+      user: invidious
+    hmac_key: null
+    port: 3000
+  # Just here for testing
+  added_in_defaults: defaults_value
+  winner: defaults
+...

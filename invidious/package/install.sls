@@ -22,6 +22,8 @@ Invidious user session is initialized at boot:
   compose.lingering_managed:
     - name: {{ invidious.lookup.user.name }}
     - enable: {{ invidious.install.rootless }}
+    - require:
+      - user: {{ invidious.lookup.user.name }}
 
 Invidious paths are present:
   file.directory:

@@ -17,6 +17,7 @@ invidious:
         ephemeral: true
         pod_prefix: null
         restart_policy: on-failure
+        restart_sec: 2
         separator: null
         stop_timeout: null
     paths:
@@ -32,6 +33,7 @@ invidious:
       name: invidious
       shell: /usr/sbin/nologin
       uid: null
+      gid: null
     containers:
       invidious:
         image: quay.io/invidious/invidious:latest

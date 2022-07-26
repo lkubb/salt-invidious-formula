@@ -35,6 +35,9 @@ Invidious user session is not initialized at boot:
   compose.lingering_managed:
     - name: {{ invidious.lookup.user.name }}
     - enable: false
+    - onlyif:
+      - fun: user.info
+        name: {{ invidious.lookup.user.name }}
     - require:
       - Invidious is absent
 
@@ -44,6 +47,9 @@ Invidious user account is absent:
     - purge: {{ invidious.install.remove_all_data_for_sure }}
     - require:
       - Invidious is absent
+    - retry:
+        attempts: 5
+        interval: 2
 
 {%- if invidious.install.remove_all_data_for_sure %}
 

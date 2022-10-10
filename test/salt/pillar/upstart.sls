@@ -45,6 +45,8 @@ invidious:
     repo: https://github.com/iv-org/invidious
   install:
     rootless: true
+    autoupdate: true
+    autoupdate_service: false
     remove_all_data_for_sure: false
   config:
     check_tables: true

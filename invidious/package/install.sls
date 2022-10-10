@@ -84,3 +84,15 @@ Invidious is installed:
     - require:
       - user: {{ invidious.lookup.user.name }}
 {%- endif %}
+
+{%- if invidious.install.autoupdate_service is not none %}
+
+Podman autoupdate service is managed for Invidious:
+{%-   if invidious.install.rootless %}
+  compose.systemd_service_{{ "enabled" if invidious.install.autoupdate_service else "disabled" }}:
+    - user: {{ invidious.lookup.user.name }}
+{%-   else %}
+  service.{{ "enabled" if invidious.install.autoupdate_service else "disabled" }}:
+{%-   endif %}
+    - name: podman-auto-update.timer
+{%- endif %}

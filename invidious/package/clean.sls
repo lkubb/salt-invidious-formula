@@ -8,6 +8,18 @@
 include:
   - {{ sls_config_clean }}
 
+{%- if invidious.install.autoupdate_service %}
+
+Podman autoupdate service is disabled for Invidious:
+{%-   if invidious.install.rootless %}
+  compose.systemd_service_disabled:
+    - user: {{ invidious.lookup.user.name }}
+{%-   else %}
+  service.disabled:
+{%-   endif %}
+    - name: podman-auto-update.timer
+{%- endif %}
+
 Invidious is absent:
   compose.removed:
     - name: {{ invidious.lookup.paths.compose }}

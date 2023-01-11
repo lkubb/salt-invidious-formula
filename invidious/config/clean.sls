@@ -15,5 +15,6 @@ Invidious environment files are absent:
     - names:
       - {{ invidious.lookup.paths.config_invidious }}
       - {{ invidious.lookup.paths.config_postgres }}
+      - {{ invidious.lookup.paths.base | path_join(".saltcache.yml") }}
     - require:
       - sls: {{ sls_service_clean }}

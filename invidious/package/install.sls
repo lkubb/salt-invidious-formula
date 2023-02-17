@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as invidious with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
@@ -36,6 +35,23 @@ Invidious paths are present:
     - require:
       - user: {{ invidious.lookup.user.name }}
 
+{%- if invidious.install.podman_api %}
+
+Invidious podman API is enabled:
+  compose.systemd_service_enabled:
+    - name: podman
+    - user: {{ invidious.lookup.user.name }}
+    - require:
+      - Invidious user session is initialized at boot
+
+Invidious podman API is available:
+  compose.systemd_service_running:
+    - name: podman
+    - user: {{ invidious.lookup.user.name }}
+    - require:
+      - Invidious user session is initialized at boot
+{%- endif %}
+
 # The Postgres container requires the database init files from the repo.
 # git.cloned would suffice mostly, but it cannot clone into an existing dir
 # https://github.com/saltstack/salt/issues/55926
@@ -49,8 +65,8 @@ Invidious repository is cloned:
 Invidious compose file is managed:
   file.managed:
     - name: {{ invidious.lookup.paths.compose }}
-    - source: {{ files_switch(['docker-compose.yml', 'docker-compose.yml.j2'],
-                              lookup='Invidious compose file is present'
+    - source: {{ files_switch(["docker-compose.yml", "docker-compose.yml.j2"],
+                              lookup="Invidious compose file is present"
                  )
               }}
     - mode: '0644'

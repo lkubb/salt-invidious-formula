@@ -1,8 +1,14 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
-{%- set sls_config_clean = tplroot ~ '.config.clean' %}
+{#-
+    Removes the invidious, postgres containers
+    and the corresponding user account and service units.
+    Has a depency on `invidious.config.clean`_.
+    If ``remove_all_data_for_sure`` was set, also removes all data.
+#}
+
+{%- set tplroot = tpldir.split("/")[0] %}
+{%- set sls_config_clean = tplroot ~ ".config.clean" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as invidious with context %}
 
 include:
@@ -42,6 +48,25 @@ Invidious compose file is absent:
       - {{ invidious.lookup.paths.src }}
     - require:
       - Invidious is absent
+
+{%- if invidious.install.podman_api %}
+
+Invidious podman API is unavailable:
+  compose.systemd_service_dead:
+    - name: podman
+    - user: {{ invidious.lookup.user.name }}
+    - onlyif:
+      - fun: user.info
+        name: {{ invidious.lookup.user.name }}
+
+Invidious podman API is disabled:
+  compose.systemd_service_disabled:
+    - name: podman
+    - user: {{ invidious.lookup.user.name }}
+    - onlyif:
+      - fun: user.info
+        name: {{ invidious.lookup.user.name }}
+{%- endif %}
 
 Invidious user session is not initialized at boot:
   compose.lingering_managed:

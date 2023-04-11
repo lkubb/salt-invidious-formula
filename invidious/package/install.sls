@@ -39,14 +39,14 @@ Invidious paths are present:
 
 Invidious podman API is enabled:
   compose.systemd_service_enabled:
-    - name: podman
+    - name: podman.socket
     - user: {{ invidious.lookup.user.name }}
     - require:
       - Invidious user session is initialized at boot
 
 Invidious podman API is available:
   compose.systemd_service_running:
-    - name: podman
+    - name: podman.socket
     - user: {{ invidious.lookup.user.name }}
     - require:
       - Invidious user session is initialized at boot

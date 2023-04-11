@@ -53,7 +53,7 @@ Invidious compose file is absent:
 
 Invidious podman API is unavailable:
   compose.systemd_service_dead:
-    - name: podman
+    - name: podman.socket
     - user: {{ invidious.lookup.user.name }}
     - onlyif:
       - fun: user.info
@@ -61,7 +61,7 @@ Invidious podman API is unavailable:
 
 Invidious podman API is disabled:
   compose.systemd_service_disabled:
-    - name: podman
+    - name: podman.socket
     - user: {{ invidious.lookup.user.name }}
     - onlyif:
       - fun: user.info

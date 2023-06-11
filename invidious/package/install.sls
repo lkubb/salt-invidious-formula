@@ -2,7 +2,7 @@
 
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as invidious with context %}
-{%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
+{%- from tplroot ~ "/libtofsstack.jinja" import files_switch with context %}
 
 Invidious user account is present:
   user.present:
@@ -65,14 +65,16 @@ Invidious repository is cloned:
 Invidious compose file is managed:
   file.managed:
     - name: {{ invidious.lookup.paths.compose }}
-    - source: {{ files_switch(["docker-compose.yml", "docker-compose.yml.j2"],
-                              lookup="Invidious compose file is present"
+    - source: {{ files_switch(
+                    ["docker-compose.yml", "docker-compose.yml.j2"],
+                    config=invidious,
+                    lookup="Invidious compose file is present",
                  )
               }}
     - mode: '0644'
     - user: root
     - group: {{ invidious.lookup.rootgroup }}
-    - makedirs: True
+    - makedirs: true
     - template: jinja
     - makedirs: true
     - context:

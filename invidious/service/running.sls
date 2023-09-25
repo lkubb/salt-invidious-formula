@@ -34,3 +34,4 @@ Invidious service is running:
 {%- endif %}
     - watch:
       - Invidious is installed
+      - sls: {{ sls_config_file }}

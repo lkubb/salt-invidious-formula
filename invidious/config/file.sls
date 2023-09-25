@@ -34,7 +34,7 @@ Invidious environment files are managed:
     - template: jinja
     - require:
       - user: {{ invidious.lookup.user.name }}
-    - watch_in:
+    - require_in:
       - Invidious is installed
     - context:
         invidious: {{ invidious | json }}

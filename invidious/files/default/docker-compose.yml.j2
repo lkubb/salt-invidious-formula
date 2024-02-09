@@ -33,9 +33,9 @@ services:
     image: {{ invidious.lookup.containers.postgres.image }}
     restart: unless-stopped
     volumes:
-      - {{ invidious.lookup.paths.db or "postgresdata" }}:/var/lib/postgresql/data
-      - {{ invidious.lookup.paths.src | path_join("config", "sql") }}:/config/sql
-      - {{ invidious.lookup.paths.src | path_join("docker", "init-invidious-db.sh") }}:/docker-entrypoint-initdb.d/init-invidious-db.sh
+      - {{ invidious.lookup.paths.db or "postgresdata" }}:/var/lib/postgresql/data:Z
+      - {{ invidious.lookup.paths.src | path_join("config", "sql") }}:/config/sql:z
+      - {{ invidious.lookup.paths.src | path_join("docker", "init-invidious-db.sh") }}:/docker-entrypoint-initdb.d/init-invidious-db.sh:z
     env_file:
       - {{ invidious.lookup.paths.config_postgres }}
 {%- if invidious.install.autoupdate %}

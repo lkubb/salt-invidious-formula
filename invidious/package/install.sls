@@ -16,6 +16,21 @@ Invidious user account is present:
     - groups: {{ invidious.lookup.user.groups | json }}
     # (on Debian 11) subuid/subgid are only added automatically for non-system users
     - system: false
+  file.append:
+    - names:
+      - {{ invidious.lookup.user.home | path_join(".bashrc") }}:
+        - text:
+          - export XDG_RUNTIME_DIR=/run/user/$(id -u)
+          - export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
+
+      - {{ invidious.lookup.user.home | path_join(".bash_profile") }}:
+        - text: |
+            if [ -f ~/.bashrc ]; then
+              . ~/.bashrc
+            fi
+
+    - require:
+      - user: {{ invidious.lookup.user.name }}
 
 Invidious user session is initialized at boot:
   compose.lingering_managed:
